@@ -21,8 +21,7 @@ img_size = img_height * img_width
 to_train = True
 to_test = False
 to_restore = False
-output_path = "./output"
-check_dir = "./output/checkpoints/"
+check_dir = "dl_research/projects/CycleGAN/output/checkpoints/"
 
 
 temp_check = 0
@@ -53,10 +52,10 @@ class CycleGAN():
         '''
 
         filenames_A = tf.train.match_filenames_once(
-            "./input/horse2zebra/trainA/*.jpg")
+            "dl_research/projects/CycleGAN/input/horse2zebra/trainA/*.jpg")
         self.queue_length_A = tf.size(filenames_A)
         filenames_B = tf.train.match_filenames_once(
-            "./input/horse2zebra/trainB/*.jpg")
+            "dl_research/projects/CycleGAN/input/horse2zebra/trainB/*.jpg")
         self.queue_length_B = tf.size(filenames_B)
 
         filename_queue_A = tf.train.string_input_producer(filenames_A)
@@ -206,23 +205,23 @@ class CycleGAN():
 
     def save_training_images(self, sess, epoch):
 
-        if not os.path.exists("./output/imgs"):
-            os.makedirs("./output/imgs")
+        if not os.path.exists("dl_research/projects/CycleGAN/output/imgs"):
+            os.makedirs("dl_research/projects/CycleGAN/output/imgs")
 
         for i in range(0, 10):
             fake_A_temp, fake_B_temp, cyc_A_temp, cyc_B_temp = sess.run([self.fake_A, self.fake_B, self.cyc_A, self.cyc_B], feed_dict={
                                                                         self.input_A: self.A_input[i], self.input_B: self.B_input[i]})
-            imsave("./output/imgs/fakeB_" + str(epoch) + "_" + str(i) +
+            imsave("dl_research/projects/CycleGAN/output/imgs/fakeB_" + str(epoch) + "_" + str(i) +
                    ".jpg", ((fake_A_temp[0]+1)*127.5).astype(np.uint8))
-            imsave("./output/imgs/fakeA_" + str(epoch) + "_" + str(i) +
+            imsave("dl_research/projects/CycleGAN/output/imgs/fakeA_" + str(epoch) + "_" + str(i) +
                    ".jpg", ((fake_B_temp[0]+1)*127.5).astype(np.uint8))
-            imsave("./output/imgs/cycA_" + str(epoch) + "_" + str(i) +
+            imsave("dl_research/projects/CycleGAN/output/imgs/cycA_" + str(epoch) + "_" + str(i) +
                    ".jpg", ((cyc_A_temp[0]+1)*127.5).astype(np.uint8))
-            imsave("./output/imgs/cycB_" + str(epoch) + "_" + str(i) +
+            imsave("dl_research/projects/CycleGAN/output/imgs/cycB_" + str(epoch) + "_" + str(i) +
                    ".jpg", ((cyc_B_temp[0]+1)*127.5).astype(np.uint8))
-            imsave("./output/imgs/inputA_" + str(epoch) + "_" + str(i) +
+            imsave("dl_research/projects/CycleGAN/output/imgs/inputA_" + str(epoch) + "_" + str(i) +
                    ".jpg", ((self.A_input[i][0]+1)*127.5).astype(np.uint8))
-            imsave("./output/imgs/inputB_" + str(epoch) + "_" + str(i) +
+            imsave("dl_research/projects/CycleGAN/output/imgs/inputB_" + str(epoch) + "_" + str(i) +
                    ".jpg", ((self.B_input[i][0]+1)*127.5).astype(np.uint8))
 
     def fake_image_pool(self, num_fakes, fake, fake_pool):
@@ -271,7 +270,8 @@ class CycleGAN():
                 chkpt_fname = tf.train.latest_checkpoint(check_dir)
                 saver.restore(sess, chkpt_fname)
 
-            writer = tf.summary.FileWriter("./output/2")
+            writer = tf.summary.FileWriter(
+                "dl_research/projects/CycleGAN/output/2")
 
             if not os.path.exists(check_dir):
                 os.makedirs(check_dir)
@@ -352,19 +352,19 @@ class CycleGAN():
             chkpt_fname = tf.train.latest_checkpoint(check_dir)
             saver.restore(sess, chkpt_fname)
 
-            if not os.path.exists("./output/imgs/test/"):
-                os.makedirs("./output/imgs/test/")
+            if not os.path.exists("dl_research/projects/CycleGAN/output/imgs/test/"):
+                os.makedirs("dl_research/projects/CycleGAN/output/imgs/test/")
 
             for i in range(0, 100):
                 fake_A_temp, fake_B_temp = sess.run([self.fake_A, self.fake_B], feed_dict={
                                                     self.input_A: self.A_input[i], self.input_B: self.B_input[i]})
-                imsave("./output/imgs/test/fakeB_"+str(i)+".jpg",
+                imsave("dl_research/projects/CycleGAN/output/imgs/test/fakeB_"+str(i)+".jpg",
                        ((fake_A_temp[0]+1)*127.5).astype(np.uint8))
-                imsave("./output/imgs/test/fakeA_"+str(i)+".jpg",
+                imsave("dl_research/projects/CycleGAN/output/imgs/test/fakeA_"+str(i)+".jpg",
                        ((fake_B_temp[0]+1)*127.5).astype(np.uint8))
-                imsave("./output/imgs/test/inputA_"+str(i)+".jpg",
+                imsave("dl_research/projects/CycleGAN/output/imgs/test/inputA_"+str(i)+".jpg",
                        ((self.A_input[i][0]+1)*127.5).astype(np.uint8))
-                imsave("./output/imgs/test/inputB_"+str(i)+".jpg",
+                imsave("dl_research/projects/CycleGAN/output/imgs/test/inputB_"+str(i)+".jpg",
                        ((self.B_input[i][0]+1)*127.5).astype(np.uint8))
 
 
