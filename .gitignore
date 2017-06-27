@@ -2,3 +2,4 @@ __pycache__/
 output/
 input/
 MNIST_data
+.DS_Store
